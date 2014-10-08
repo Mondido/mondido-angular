@@ -1,0 +1,23 @@
+{
+  "name": "mondido-angular",
+  "version": "1.0.0",
+  "authors": [
+    "Robert Falkén <falken@mondido.com>"
+  ],
+  "description": "Angular directive for making payments with Mondido Payments",
+  "main": "mondido.js",
+  "keywords": [
+    "mondido",
+    "payments",
+    "angular"
+  ],
+  "license": "MIT",
+  "homepage": "https://mondido.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
