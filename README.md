@@ -3,11 +3,19 @@ mondido-angular
 
 An angular directive for consuming the Mondido Payments API.
 
+The app
+---
+Add `mondido` as a dependency.
+
+<pre>
+angular.module('mondidoAngularApp', ['mondido'])
+</pre>
+
+
 The controller
 ---
 <pre>
     $scope.payment = {};
-
 
     $scope.payment.amount = '1.00';
     $scope.payment.paymentRef = 'payref';
