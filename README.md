@@ -6,7 +6,7 @@ An angular directive for consuming the Mondido Payments API.
 Installation
 ===
 Install using bower
-`bower install mondido-angular`
+`bower install mondido-angular --save`
 
 Or install the ol' regular way by including `mondido.directive.js` in your project.
 
