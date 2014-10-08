@@ -8,7 +8,7 @@ The app
 Add `mondido` as a dependency.
 
 <pre>
-angular.module('mondidoAngularApp', ['mondido'])
+angular.module('eCommerceApp', ['mondido'])
 </pre>
 
 
