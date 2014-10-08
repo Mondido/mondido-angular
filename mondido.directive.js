@@ -138,30 +138,22 @@ angular.module('mondido', [])
       return pidCryptUtil.fragment(pidCryptUtil.encodeBase64(pidCryptUtil.convertFromHex(encrypted)),64)
     };
 
-        function camelToSnake(str){
-          return str.replace(/[A-Z]/g, function(match){ return '_'+match; }).toLowerCase();
-        }
-
         function createPayloadFromData(data){
           var payload = {};
           var encrypted = [];
           var config = scope[attrs.paymentConfig];
 
-          if (typeof config.encryptedParameters !== 'undefined' && $.isArray(config.encryptedParameters)) {
-            encrypted = config.encryptedParameters;
+          if (typeof config.encrypted_parameters !== 'undefined' && $.isArray(config.encrypted_parameters)) {
+            encrypted = config.encrypted_parameters;
           }
 
           for (var prop in data) {
-            var camelCase = camelToSnake(prop);
-            
             if (encrypted.indexOf(prop) > -1) {
-              payload[camelCase] = string_to_encrypted(data[prop], config.publicKey);
+              payload[prop] = string_to_encrypted(data[prop], config.publicKey);
             } else {
-              payload[camelCase] = data[prop];
+              payload[prop] = data[prop];
             }
           }
-
-          payload.encrypted = camelToSnake(encrypted.join(','));
 
           return payload;
         }
