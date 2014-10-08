@@ -6,7 +6,7 @@ An angular directive for consuming the Mondido Payments API.
 The view
 ---
 
-<pre>
+<code>
   <form>
     <div class="form-group">
       <label for="card_holder">Namn på kort</label>
@@ -56,4 +56,4 @@ The view
       <button class="btn btn-primary">Betala</button>
     </div>
   </form>
-</pre>
+</code>
