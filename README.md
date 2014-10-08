@@ -3,6 +3,37 @@ mondido-angular
 
 An angular directive for consuming the Mondido Payments API.
 
+The controller
+---
+<pre>
+    $scope.payment = {};
+
+
+    $scope.payment.amount = '1.00';
+    $scope.payment.paymentRef = 'payref';
+    $scope.payment.currency = 'SEK';
+    $scope.payment.hash = 'hash';
+    $scope.payment.merchantId = '1';
+
+    $scope.mondidoConfig = {
+      url: 'http://api.localmondido.com:3000/v1/transactions',
+      success: function(transaction){
+        window.alert('success: Transaction '+transaction.id);
+        console.log(transaction);
+      },
+      error: function(err){
+        window.alert('error: ' + err.description);
+        console.log(err);
+      },
+      finished: function(err, transaction){
+        console.log('finished', err, transactions);
+      },
+      encryptedParameters: ['cardNumber', 'cardHolder', 'cardCvv', 'cardExpiry'],
+      publicKey: '-----BEGIN PUBLIC KEY-----\ YOUR PUBLIC KEY -----END PUBLIC KEY-----\n'
+    };
+</pre>
+
+
 The view
 ---
 
