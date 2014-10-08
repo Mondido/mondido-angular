@@ -146,7 +146,6 @@ angular.module('mondido', [])
           var payload = {};
           var encrypted = [];
           var config = scope[attrs.paymentConfig];
-          console.log(data);
 
           if (typeof config.encryptedParameters !== 'undefined' && $.isArray(config.encryptedParameters)) {
             encrypted = config.encryptedParameters;
@@ -169,27 +168,33 @@ angular.module('mondido', [])
         
         
         element.bind('submit', function(){
-          console.log(scope['payment'], attrs);
-          var payload = createPayloadFromData(scope[attrs.ngmodel]);
           var config = scope[attrs.paymentConfig];
 
-          console.log(payload, config);
+          function done(){
+            var payload = createPayloadFromData(scope[attrs.ngmodel]);
+            $.ajax({
+              type: 'POST',
+              url: config.url,
+              data: payload,
+              success: function(r){
+                if (typeof config.paymentSuccess === 'function') {
+                  config.paymentSuccess(r);
+                }
+              },
+              error: function(r){
+                if (typeof config.paymentError === 'function') {
+                  config.paymentError(r.responseJSON || $.parseJSON(r.responseText));
+                }
+              }
+            });
+            };
 
-          $.ajax({
-            type: 'POST',
-            url: config.url,
-            data: payload,
-            success: function(r){
-              if (typeof config.paymentSuccess === 'function') {
-                config.paymentSuccess(r);
-              }
-            },
-            error: function(r){
-              if (typeof config.paymentError === 'function') {
-                config.paymentError(r.responseJSON || $.parseJSON(r.responseText));
-              }
+
+            if (config.prepare && typeof config.prepare == 'function') {
+              config.prepare(done);
+            } else {
+              done();
             }
-          });
         });
       }
     };
