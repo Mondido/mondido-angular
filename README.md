@@ -66,7 +66,7 @@ The view
 ---
 
 <pre>
-  &lt;form payment-config="mondidoConfig" ngModel="payment"&gt;
+  &lt;form payment-config="mondidoConfig" ng-model="payment"&gt;
     &lt;div class="form-group"&gt;
       &lt;label for="card_holder"&gt;Namn på kort&lt;/label&gt;
       &lt;input type="text" id="card_holder" ng-model="payment.card_holder" class="form-control" /&gt;

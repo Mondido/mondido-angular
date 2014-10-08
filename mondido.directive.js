@@ -142,18 +142,19 @@ angular.module('mondido', [])
           var payload = {};
           var encrypted = [];
           var config = scope[attrs.paymentConfig];
-
           if (typeof config.encrypted_parameters !== 'undefined' && $.isArray(config.encrypted_parameters)) {
             encrypted = config.encrypted_parameters;
           }
 
           for (var prop in data) {
             if (encrypted.indexOf(prop) > -1) {
-              payload[prop] = string_to_encrypted(data[prop], config.publicKey);
+              payload[prop] = string_to_encrypted(data[prop], config.public_key);
             } else {
               payload[prop] = data[prop];
             }
           }
+
+          payload.encrypted = encrypted.join(',');
 
           return payload;
         }
@@ -163,7 +164,9 @@ angular.module('mondido', [])
           var config = scope[attrs.paymentConfig];
 
           function done(){
-            var payload = createPayloadFromData(scope[attrs.ngmodel]);
+            console.log(attrs);
+            var payload = createPayloadFromData(scope[attrs.ngModel]);
+            console.log(payload);
             $.ajax({
               type: 'POST',
               url: config.url || 'https://api.mondido.com/v1/transactions',
