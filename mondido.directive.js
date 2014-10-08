@@ -174,17 +174,20 @@ angular.module('mondido', [])
             var payload = createPayloadFromData(scope[attrs.ngmodel]);
             $.ajax({
               type: 'POST',
-              url: config.url,
+              url: config.url || 'https://api.mondido.com/v1/transactions',
               data: payload,
               success: function(r){
-                if (typeof config.paymentSuccess === 'function') {
-                  config.paymentSuccess(r);
+                if (typeof config.success === 'function') {
+                  config.success(r);
                 }
               },
               error: function(r){
-                if (typeof config.paymentError === 'function') {
-                  config.paymentError(r.responseJSON || $.parseJSON(r.responseText));
+                if (typeof config.error === 'function') {
+                  config.error(r.responseJSON || $.parseJSON(r.responseText));
                 }
+              },
+              complete: function(jqXHR, textStatus){
+                console.log(jqXHR, textStatus);
               }
             });
             };
