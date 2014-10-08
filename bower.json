@@ -1,11 +1,11 @@
 {
   "name": "mondido-angular",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "authors": [
     "Robert Falkén <falken@mondido.com>"
   ],
   "description": "Angular directive for making payments with Mondido Payments",
-  "main": "mondido.js",
+  "main": "mondido.directive.js",
   "keywords": [
     "mondido",
     "payments",
