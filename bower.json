@@ -4,7 +4,7 @@
   "authors": [
     "Robert Falkén <falken@mondido.com>"
   ],
-  "description": "Angular directive for making payments with Mondido Payments",
+  "description": "An angular directive for consuming the Mondido Payments API.",
   "main": "mondido.directive.js",
   "keywords": [
     "mondido",
