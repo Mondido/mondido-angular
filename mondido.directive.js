@@ -6,6 +6,7 @@ angular.module('mondido', [])
         var mpiWindow;
         var payment = scope[attrs.ngModel];
         var config = scope[attrs.paymentConfig];
+        scope.mondido = {};
 
         /*Copyright (c) 2009 pidder <www.pidder.comoOcono*/
 
@@ -86,7 +87,7 @@ angular.module('mondido', [])
           return retObj;
         }
 
-        if ( window.XDomainRequest ) {
+        /*if ( window.XDomainRequest ) {
           jQuery.ajaxTransport(function( s ) {
             if ( s.crossDomain && s.async ) {
               if ( s.timeout ) {
@@ -125,7 +126,7 @@ angular.module('mondido', [])
               };
             }
           });
-        }
+        }*/
 
         function string_to_encrypted(str, public_key) {
           var params = certParser(public_key);
@@ -160,11 +161,26 @@ angular.module('mondido', [])
           return payload;
         }
 
-        function openMpi(){
-          mpiWindow = $window.open('', 'mpi-window', 'width=640,height=480,top=100,left=100');
+        // Open a new window that will later get the MPI post
+        function openMpi(){          
+          mpiWindow = $window.open('', 'mpi-window', 'width=640,height=480,top=200,left=500');
+          scope.mondido.waitingForMpi = true;
+
+          function checkMpiWindowStatus(){
+            if (mpiWindow.closed) {
+              scope.$apply(function(){
+                scope.mondido.waitingForMpi = false;
+              });
+            } else {
+              setTimeout(checkMpiWindowStatus, 200);
+            }
+          };
+          checkMpiWindowStatus();
+
         }
 
 
+        // Create a form and post it the MPI endpoint
         function postToMpi(){
           var payload = createPayloadFromData(payment);
           var mpiPostForm = $(document.createElement('form'))
@@ -183,7 +199,8 @@ angular.module('mondido', [])
           mpiPostForm.submit();
         }
 
-
+        // Gets called back after MPI flow is finshed
+        // Adds MPI attributes and then calls the Mondido API
         function mpiCallback(e){
           var data = null;
           try {
@@ -194,8 +211,11 @@ angular.module('mondido', [])
           if (!data || data.event != 'mpi') {
             return false;
           } else {
-            console.log(data);
             mpiWindow.close();
+            scope.$apply(function(){
+              scope.mondido.waitingForMpi = false;
+            });
+
             if (data.success) {
               payment.ref = data.mpi_ref;
               payment.eci = data.eci;
@@ -205,25 +225,32 @@ angular.module('mondido', [])
           }
         }
 
+        // Call the Mondido API endpoint configured in the scope
+        // then call adequate callbacks if configured in the config
         function callApi(){
-            $.ajax({
-              type: 'POST',
-              url: config.url || 'https://api.mondido.com/v1/transactions',
-              data: createPayloadFromData(payment),
-              success: function(r){
-                if (typeof config.success === 'function') {
-                  config.success(r);
-                }
-              },
-              error: function(r){
-                if (typeof config.error === 'function') {
-                  config.error(r.responseJSON || $.parseJSON(r.responseText));
-                }
-              },
-              complete: function(jqXHR, textStatus){
-                console.log(jqXHR, textStatus);
+          $.ajax({
+            type: 'POST',
+            url: config.url || 'https://api.mondido.com/v1/transactions',
+            data: createPayloadFromData(payment),
+            success: function(r){
+              if (typeof config.success === 'function') {
+                config.success(r);
+                scope.$digest();
               }
-            });
+            },
+            error: function(r){
+              if (typeof config.error === 'function') {
+                config.error(r.responseJSON || $.parseJSON(r.responseText));
+                scope.$digest();
+              }
+            },
+            complete: function(jqXHR, textStatus){
+              if (typeof config.complete === 'function') {
+                config.complete(jqXHR, textStatus);
+                scope.$digest();
+              }
+            }
+          });
         }
        
         if ($window.addEventListener) {
@@ -232,25 +259,22 @@ angular.module('mondido', [])
           $window.attachEvent("onmessage", mpiCallback);
         }
 
-        scope.mondido = function(){
+        // Open MPI window and run the user configured prepare method before proceeding with the MPI process
+        // We need to pop the window here because browsers will block it in the done callback
+        element.bind('submit', function(){
+          openMpi();
 
           function done(){
             postToMpi();
             return;
           }
 
-
+          // Run the prepare method if the user defined it, else just proceed
           if (config.prepare && typeof config.prepare == 'function') {
             config.prepare(done);
           } else {
             done();
           }
-        };
-
-        element.bind('submit', function(){
-          var config = scope[attrs.paymentConfig];
-          openMpi();
-
         });
       }
     };
