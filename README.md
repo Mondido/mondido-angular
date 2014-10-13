@@ -67,52 +67,31 @@ The view
 
 <pre>
   &lt;form payment-config="mondidoConfig" ng-model="payment"&gt;
-    &lt;div class="form-group"&gt;
-      &lt;label for="card_holder"&gt;Namn på kort&lt;/label&gt;
-      &lt;input type="text" id="card_holder" ng-model="payment.card_holder" class="form-control" /&gt;
-    &lt;/div&gt;
-    &lt;div class="row"&gt;
-      &lt;div class="form-group col-sm-6"&gt;
-        &lt;label for="card_number"&gt;Kortnummer&lt;/label&gt;
-        &lt;input type="text" id="card_number" ng-model="payment.card_number" class="form-control" /&gt;
-      &lt;/div&gt;
-      &lt;div class="form-group col-sm-2"&gt;
-        &lt;label for="card_cvv"&gt;CVV&lt;/label&gt;
-        &lt;input type="text" id="card_cvv" ng-model="payment.card_cvv" class="form-control" /&gt;
-      &lt;/div&gt;
-      &lt;div class="form-group col-sm-2"&gt;
-        &lt;label for="card_expiry"&gt;Utångsdatum&lt;/label&gt;
-        &lt;input type="text" id="card_expiry" ng-model="payment.card_expiry" class="form-control" /&gt;
-      &lt;/div&gt;
-      &lt;div class="form-group col-sm-2"&gt;
-        &lt;label for="card_type"&gt;Korttyp&lt;/label&gt;
-        &lt;input type="text" id="card_type" ng-model="payment.card_type" class="form-control" /&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="row"&gt;
-      &lt;div class="form-group col-sm-2"&gt;
-        &lt;label for="amount"&gt;Summa&lt;/label&gt;
-        &lt;input type="text" id="amount" ng-model="payment.amount" class="form-control" /&gt;
-      &lt;/div&gt;
-      &lt;div class="form-group col-sm-2"&gt;
-        &lt;label for="payment_ref"&gt;Paym. Ref&lt;/label&gt;
-        &lt;input type="text" id="payment_ref" ng-model="payment.payment_ref" class="form-control" /&gt;
-      &lt;/div&gt;
-      &lt;div class="form-group col-sm-2"&gt;
-        &lt;label for="currency"&gt;Valuta&lt;/label&gt;
-        &lt;input type="text" id="currency" ng-model="payment.currency" class="form-control" /&gt;
-      &lt;/div&gt;
-      &lt;div class="form-group col-sm-2"&gt;
-        &lt;label for="merchant_id"&gt;Merch&lt;/label&gt;
-        &lt;input type="text" id="merchant_id" ng-model="payment.merchant_id" class="form-control" /&gt;
-      &lt;/div&gt;
-      &lt;div class="form-group col-sm-4"&gt;
-        &lt;label for="hash"&gt;Hash&lt;/label&gt;
-        &lt;input type="text" id="hash" ng-model="payment.hash" class="form-control" /&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="form-group"&gt;
-      &lt;button class="btn btn-primary"&gt;Betala&lt;/button&gt;
-    &lt;/div&gt;
+    &lt;label for="card_holder"&gt;Namn på kort&lt;/label&gt;
+    &lt;input type="text" ng-model="payment.card_holder"/&gt;
+
+    &lt;label for="card_number"&gt;Kortnummer&lt;/label&gt;
+    &lt;input type="text" ng-model="payment.card_number"/&gt;
+    
+    &lt;label for="card_cvv"&gt;CVV&lt;/label&gt;
+    &lt;input type="text" ng-model="payment.card_cvv"/&gt;
+    
+    &lt;label for="card_expiry"&gt;Utångsdatum&lt;/label&gt;
+    &lt;input type="text" ng-model="payment.card_expiry"/&gt;
+    
+    &lt;label for="card_type"&gt;Korttyp&lt;/label&gt;
+    &lt;input type="text" ng-model="payment.card_type"/&gt;
+    
+    &lt;input type="hidden" ng-model="payment.amount"/&gt;
+    &lt;input type="hidden" ng-model="payment.payment_ref"/&gt;
+    &lt;input type="hidden" ng-model="payment.currency"/&gt;
+    &lt;input type="hidden" ng-model="payment.merchant_id"/&gt;
+    &lt;input type="hidden" ng-model="payment.hash"/&gt;
+    
+    &lt;button&gt;Pay&lt;/button&gt;
   &lt;/form&gt;
+
+  &lt;div ng-show="mondido.waitingForMpi"&gt;
+    Waiting for MPI
+  &lt;/div&gt;
 </pre>
