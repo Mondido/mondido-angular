@@ -172,7 +172,7 @@ angular.module('mondido', [])
           var data = null;
           try {
             data = $.parseJSON(e.data);
-          } catch(e) {
+          } catch(exception) {
             return false;
           }
           if (!data || data.event !== 'mpi') {
