@@ -10,7 +10,7 @@ Install using bower
 
 Or install the ol' regular way by including `mondido.directive.js` in your project.
 
-Implementation
+Usage
 ===
 
 The app
@@ -26,8 +26,8 @@ The controller
 ---
 <pre>
     $scope.payment = {
-      amount: '1.00',
-      currency: 'SEK',
+      amount: '110.00',
+      currency: 'USD',
       merchant_id: '1'
     };    
 
@@ -61,12 +61,49 @@ The controller
     };
 </pre>
 
+## The configuration object
+### Properties
+####url  
+**string** The API endpoint. This can be your own backend or a Mondido API endpoint.
+
+####prepare(done)  
+**function** An optional function to run before the actual payment request is performed, useful for preparing the order in your backend and returning the hash.
+
+Gets called with a callback method as an argument. You need to call this function when the payment is ready to be processed, this enables asyncronous setup before the request.
+
+####success(object)
+**function** An optional callback function that is called after a successful payment.
+
+Gets called with the newly created object (e.g. a transaction) as an argument. See <https://mondido.com/documentation/api> for information on the various objects.
+
+####error(err)
+**function** An optional callback function that is called after a failed payment.  
+
+Gets called with with an error object as an argument. See <https://mondido.com/documentation/api> for a complete list of error messages.
+
+####complete(jqXHR, textStatus)
+**function** An optional callback function that is called after the request, regardless of outcome.  
+
+Gets called with the full jqXHR object and tht http status as a string ([see jQuery doc](http://api.jquery.com/jquery.ajax/)) 
+
+####encrypted_parameters
+**array** The parameters you wish to encrypt before posting them to the API endpoint.
+
+####public_key
+**string** Your public key. You find it under the merchant settings in the admin page. **required for encryption*
+
 
 The view
 ---
 
 <pre>
   &lt;form payment-config="mondidoConfig" ng-model="payment"&gt;
+    &lt;input type="hidden" ng-model="payment.amount"/&gt;
+    &lt;input type="hidden" ng-model="payment.payment_ref"/&gt;
+    &lt;input type="hidden" ng-model="payment.currency"/&gt;
+    &lt;input type="hidden" ng-model="payment.merchant_id"/&gt;
+    &lt;input type="hidden" ng-model="payment.hash"/&gt;
+    
     &lt;label for="card_holder"&gt;Namn på kort&lt;/label&gt;
     &lt;input type="text" ng-model="payment.card_holder"/&gt;
 
@@ -81,16 +118,11 @@ The view
     
     &lt;label for="card_type"&gt;Korttyp&lt;/label&gt;
     &lt;input type="text" ng-model="payment.card_type"/&gt;
-    
-    &lt;input type="hidden" ng-model="payment.amount"/&gt;
-    &lt;input type="hidden" ng-model="payment.payment_ref"/&gt;
-    &lt;input type="hidden" ng-model="payment.currency"/&gt;
-    &lt;input type="hidden" ng-model="payment.merchant_id"/&gt;
-    &lt;input type="hidden" ng-model="payment.hash"/&gt;
-    
+
     &lt;button&gt;Pay&lt;/button&gt;
   &lt;/form&gt;
 
+  &lt;!-- Optional, show a message while performing the 3D Secure check --&gt;
   &lt;div ng-show="mondido.waitingForMpi"&gt;
     Waiting for MPI
   &lt;/div&gt;
