@@ -1,6 +1,6 @@
 {
   "name": "mondido-angular",
-  "version": "0.0.5",
+  "version": "1.0.1",
   "authors": [
     "Robert Falkén <falken@mondido.com>"
   ],
@@ -21,8 +21,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": ">=1.11.1",
-    "pidcrypt": "~0.3.0",
-    "asn1js": "~0.1.0"
+    "jquery": ">=1.11.1"
   }
 }
