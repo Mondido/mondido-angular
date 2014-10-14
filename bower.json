@@ -22,6 +22,7 @@
   ],
   "dependencies": {
     "jquery": ">=1.11.1",
-    "pidcrypt": "~0.3.0"
+    "pidcrypt": "~0.3.0",
+    "asn1js": "~0.1.0"
   }
 }
