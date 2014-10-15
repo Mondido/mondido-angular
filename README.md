@@ -18,24 +18,24 @@ The app
 Add `mondido` as a dependency.
 
 <pre>
-angular.module('eCommerceApp', ['mondido'])
+angular.module('eCommerceApp', ['<strong>mondido</strong>'])
 </pre>
 
 
 The controller
 ---
 <pre>
-    $scope.payment = {
+    <strong>$scope.payment</strong> = {
       amount: '110.00',
       currency: 'USD',
       merchant_id: '1'
     };    
 
-    $scope.mondidoConfig = {            
+    <strong>$scope.mondidoConfig</strong> = {            
       // API endpoint, (optional, defaults to https://api.mondido.com/v1/transactions)
-      url: 'http://api.mondido.com/v1/transactions',
+      <strong>url</strong>: 'http://api.mondido.com/v1/transactions',
       // Prepare order for payment processing (optional)
-      prepare: function(done){
+      <strong>prepare</strong>: function(done){
         Order.create($scope.payment, function(order){
           $scope.payment.payment_ref = order.payment_ref;
           $scope.payment.hash = order.hash;
@@ -43,21 +43,21 @@ The controller
         });
       },
       // Callback after successful payment
-      success: function(transaction){
+      <strong>success</strong>: function(transaction){
         window.alert('success: Transaction '+transaction.id);
       },
       // Callback after failed payment
-      error: function(err){
+      <strong>error</strong>: function(err){
         window.alert('error: ' + err.description);
       },
       // Callback after payment request, regardless of status
-      complete: function(jqXHR, textStatus){
+      <strong>complete</strong>: function(jqXHR, textStatus){
         console.log('complete', jqXHR, textStatus);
       },
       // Define which parameters should be encrypted
-      encrypted_parameters: ['card_number', 'card_holder', 'card_cvv', 'card_expiry'],
+      <strong>encrypted_parameters</strong>: ['card_number', 'card_holder', 'card_cvv', 'card_expiry'],
       // Your public key, can be found in the settings page for your merchant (https://mondido.com/settings)
-      public_key: '-----BEGIN PUBLIC KEY----- Insert your public key... ----END PUBLIC KEY-----\n'
+      <strong>public_key</strong>: '-----BEGIN PUBLIC KEY----- Insert your public key... ----END PUBLIC KEY-----\n'
     };
 </pre>
 
@@ -97,7 +97,7 @@ The view
 ---
 
 <pre>
-  &lt;form payment-config="mondidoConfig" ng-model="payment"&gt;
+  &lt;form <strong>payment-config</strong>="mondidoConfig" <strong>ng-model</strong>="payment"&gt;
     &lt;input type="hidden" ng-model="payment.amount"/&gt;
     &lt;input type="hidden" ng-model="payment.payment_ref"/&gt;
     &lt;input type="hidden" ng-model="payment.currency"/&gt;
@@ -133,3 +133,4 @@ The payment-config directive mondidifies your form, so that it can send encrypte
 
 ##### Optional loader, overlay or whatever
 In case you are using 3D Secure, the directive also provides the **mondido.waitingForMpi** boolean, which will resolve to true while the 3D Secure window is open.
+
