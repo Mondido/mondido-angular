@@ -1,3 +1,5 @@
+(function(){
+
 angular.module('mondido.encryption', [])
   .factory('encryptString', function encryptStringFactory(){
 
@@ -100,3 +102,4 @@ angular.module('mondido.encryption', [])
 
         return stringToEncrypted;
   });
+})();

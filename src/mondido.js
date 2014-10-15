@@ -1,3 +1,5 @@
+(function(){
+'use strict';
 
 angular.module('mondido', ['mondido.encryption'])
   .directive('paymentConfig', ['$window', 'encryptString', function ($window, encryptString) {
@@ -150,3 +152,4 @@ angular.module('mondido', ['mondido.encryption'])
       }
     };
   }]);
+})();
