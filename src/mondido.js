@@ -1,9 +1,10 @@
 
-angular.module('mondido', [])
-  .directive('paymentConfig', ['$window', function ($window) {
+angular.module('mondido', ['mondido.encryption'])
+  .directive('paymentConfig', ['$window', 'pidCrypt', function ($window, pidCrypt) {
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
+        console.log('pidc', pidCrypt);
         var mpiWindow;
         var payment = scope[attrs.ngModel];
         var config = scope[attrs.paymentConfig];
