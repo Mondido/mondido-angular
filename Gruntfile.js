@@ -4,7 +4,7 @@ module.exports = function(grunt){
   grunt.initConfig({
     uglify: {
       build: {
-        src: 'src/mondido.js',
+        src: ['src/mondido.js', 'src/**/*.js'],
         dest: 'mondido-angular.min.js'
       }
     }
