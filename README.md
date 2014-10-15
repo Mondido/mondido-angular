@@ -8,7 +8,7 @@ Installation
 Install using bower
 `bower install mondido-angular --save`
 
-Or install the ol' regular way by including `mondido.directive.js` in your project.
+Or install the ol' regular way by including `mondido-angular.min.js` in your project.
 
 Usage
 ===
@@ -71,15 +71,15 @@ The controller
 
 Gets called with a callback method as an argument. You need to call this function when the payment is ready to be processed, this enables asyncronous setup before the request.
 
-####success(object)
+####success(transaction)
 **function** An optional callback function that is called after a successful payment.
 
-Gets called with the newly created object (e.g. a transaction) as an argument. See <https://mondido.com/documentation/api> for information on the various objects.
+Gets called with the newly created transaction as an argument. See <https://www.mondido.com/documentation/api#transaction> for more information about the transaction object.
 
 ####error(err)
 **function** An optional callback function that is called after a failed payment.  
 
-Gets called with with an error object as an argument. See <https://mondido.com/documentation/api> for a complete list of error messages.
+Gets called with with an error object as an argument. See <https://www.mondido.com/documentation/api#errors> for a complete list of error messages.
 
 ####complete(jqXHR, textStatus)
 **function** An optional callback function that is called after the request, regardless of outcome.  
@@ -127,3 +127,9 @@ The view
     Waiting for MPI
   &lt;/div&gt;
 </pre>
+
+#### Payment form directive
+The payment-config directive mondidifies your form, so that it can send encrypted data to us or your back-end. You need to provide the **configuration object** and the **payment model** for the directive to work. Name them what you want, and let the directive know by providing the `payment-config` and `ng-model` attributes.
+
+##### Optional loader, overlay or whatever
+In case you are using 3D Secure, the directive also provides the **mondido.waitingForMpi** boolean, which will resolve to true while the 3D Secure window is open.
