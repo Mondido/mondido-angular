@@ -36,7 +36,7 @@ angular.module('mondido.directives', ['mondido.encryption'])
 
         // Open a new window that will later get the MPI post
         function openMpi(){          
-          mpiWindow = $window.open('', 'mpi-window', 'width=640,height=480,top=200,left=500');
+          mpiWindow = $window.open('', 'mpiwindow', 'width=640,height=480,top=200,left=500');
           scope.mondido.waitingForMpi = true;
 
           function checkMpiWindowStatus(){
@@ -59,7 +59,7 @@ angular.module('mondido.directives', ['mondido.encryption'])
           var mpiPostForm = $(document.createElement('form'))
             .attr('action', 'http://pay.localmondido.com:3000/v1/mpi_js')
             .attr('method', 'POST')
-            .attr('target', 'mpi-window')
+            .attr('target', 'mpiwindow')
             .appendTo('body');
 
           for (var prop in payload) {
