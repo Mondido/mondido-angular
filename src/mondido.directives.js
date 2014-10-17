@@ -12,7 +12,6 @@ angular.module('mondido.directives', ['mondido.encryption'])
         scope.mondido = {};
 
 
-
         function createPayloadFromData(data){
           var payload = {};
           var encrypted = [];
@@ -35,12 +34,31 @@ angular.module('mondido.directives', ['mondido.encryption'])
         }
 
         // Open a new window that will later get the MPI post
-        function openMpi(){          
+        function openMpi(){
+          var oldIePattern = /MSIE\s([0-9]\.[0-9]);/;
+          var ieMatch = oldIePattern.exec(navigator.userAgent);
+          var isOldIe;
+
+          if (ieMatch) {
+            var ieVersion = parseFloat(ieMatch[1]);
+            if (ieVersion < 10) {
+              isOldIe = true;
+            }
+          }
+          
+          if (isOldIe) {
+            openMpiIframe();
+          } else {
+            openMpiWindow();
+          }
+        }
+
+        function openMpiWindow(){
           mpiWindow = $window.open('', 'mpiwindow', 'width=640,height=480,top=200,left=500');
           scope.mondido.waitingForMpi = true;
 
           function checkMpiWindowStatus(){
-            if (mpiWindow.closed) {
+            if (mpiWindow && mpiWindow.closed) {
               scope.$apply(function(){
                 scope.mondido.waitingForMpi = false;
               });
@@ -49,7 +67,25 @@ angular.module('mondido.directives', ['mondido.encryption'])
             }
           }
           checkMpiWindowStatus();
+        }
 
+        function openMpiIframe(){
+          scope.waitingForMpi = true;
+
+          scope.$apply(function(){
+            var mpiOverlay = $(document.createElement('div')).appendTo('body').attr('id', 'mpi-overlay');
+            mpiWindow = $(document.createElement('iframe')).css({width: 640, height: 480}).attr('id', 'mpi-iframe').attr('name', 'mpiwindow').appendTo(mpiOverlay);
+          });
+
+        }
+
+        function closeMpiWindow(){        
+          if (mpiWindow.location) {
+            mpiWindow.close();
+          } else {
+            mpiWindow.parent().remove();
+          }
+          mpiWindow = null;
         }
 
 
@@ -76,6 +112,7 @@ angular.module('mondido.directives', ['mondido.encryption'])
         // Adds MPI attributes and then calls the Mondido API
         function mpiCallback(e){
           var data = null;
+
           try {
             data = $.parseJSON(e.data);
           } catch(exception) {
@@ -84,7 +121,7 @@ angular.module('mondido.directives', ['mondido.encryption'])
           if (!data || data.event !== 'mpi') {
             return false;
           } else {
-            mpiWindow.close();
+            closeMpiWindow();
             scope.$apply(function(){
               scope.mondido.waitingForMpi = false;
             });
@@ -106,18 +143,21 @@ angular.module('mondido.directives', ['mondido.encryption'])
             url: config.url || 'https://api.mondido.com/v1/transactions',
             data: createPayloadFromData(payment),
             success: function(r){
+              console.log('success', r);
               if (typeof config.success === 'function') {
                 config.success(r);
                 scope.$digest();
               }
             },
             error: function(r){
+              console.log('err', r);
               if (typeof config.error === 'function') {
                 config.error(r.responseJSON || $.parseJSON(r.responseText));
                 scope.$digest();
               }
             },
             complete: function(jqXHR, textStatus){
+              console.log(jqXHR);
               if (typeof config.complete === 'function') {
                 config.complete(jqXHR, textStatus);
                 scope.$digest();
@@ -131,6 +171,49 @@ angular.module('mondido.directives', ['mondido.encryption'])
         } else {
           $window.attachEvent('onmessage', mpiCallback);
         }
+
+
+        if ( window.XDomainRequest ) {
+          jQuery.ajaxTransport(function( s ) {
+            if ( s.crossDomain && s.async ) {
+              if ( s.timeout ) {
+                s.xdrTimeout = s.timeout;
+                delete s.timeout;
+              }
+              var xdr;
+              return {
+                send: function( _, complete ) {
+                  function callback( status, statusText, responses, responseHeaders ) {
+                    xdr.onload = xdr.onerror = xdr.ontimeout = jQuery.noop;
+                    xdr = undefined;
+                    complete( status, statusText, responses, responseHeaders );
+                  }
+                  xdr = new XDomainRequest();
+                  xdr.onload = function() {
+                    callback( 200, "OK", { text: xdr.responseText }, "Content-Type: " + xdr.contentType );
+                  };
+                  xdr.onerror = function() {
+                    callback( 404, "Not Found" );
+                  };
+                  xdr.onprogress = jQuery.noop;
+                  xdr.ontimeout = function() {
+                    callback( 0, "timeout" );
+                  };
+                  xdr.timeout = s.xdrTimeout || Number.MAX_VALUE;
+                  xdr.open( s.type, s.url );
+                  xdr.send( ( s.hasContent && s.data ) || null );
+                },
+                abort: function() {
+                  if ( xdr ) {
+                    xdr.onerror = jQuery.noop;
+                    xdr.abort();
+                  }
+                }
+              };
+            }
+          });
+        }
+
 
         // Open MPI window and run the user configured prepare method before proceeding with the MPI process
         // We need to pop the window here because browsers will block it in the done callback
@@ -150,6 +233,7 @@ angular.module('mondido.directives', ['mondido.encryption'])
           }
         });
       }
+
     };
   }]);
 })();
