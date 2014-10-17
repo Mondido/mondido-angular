@@ -138,17 +138,27 @@ angular.module('mondido.directives', ['mondido.encryption'])
         // Call the Mondido API endpoint configured in the scope
         // then call adequate callbacks if configured in the config
         function callApi(){
+          scope.$apply(function(){
+            scope.mondido.isLoading = true;
+          });
+
           $.ajax({
             type: 'POST',
             url: config.url || 'https://api.mondido.com/v1/transactions',
             data: createPayloadFromData(payment),
             success: function(r){
+              scope.$apply(function(){
+                scope.mondido.isLoading = false;
+              });
               if (typeof config.success === 'function') {
                 config.success(r);
                 scope.$digest();
               }
             },
             error: function(r){
+              scope.$apply(function(){
+                scope.mondido.isLoading = false;
+              });
               if (typeof config.error === 'function') {
                 config.error(r.responseJSON || $.parseJSON(r.responseText));
                 scope.$digest();
