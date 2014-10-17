@@ -143,21 +143,18 @@ angular.module('mondido.directives', ['mondido.encryption'])
             url: config.url || 'https://api.mondido.com/v1/transactions',
             data: createPayloadFromData(payment),
             success: function(r){
-              console.log('success', r);
               if (typeof config.success === 'function') {
                 config.success(r);
                 scope.$digest();
               }
             },
             error: function(r){
-              console.log('err', r);
               if (typeof config.error === 'function') {
                 config.error(r.responseJSON || $.parseJSON(r.responseText));
                 scope.$digest();
               }
             },
             complete: function(jqXHR, textStatus){
-              console.log(jqXHR);
               if (typeof config.complete === 'function') {
                 config.complete(jqXHR, textStatus);
                 scope.$digest();
@@ -218,10 +215,16 @@ angular.module('mondido.directives', ['mondido.encryption'])
         // Open MPI window and run the user configured prepare method before proceeding with the MPI process
         // We need to pop the window here because browsers will block it in the done callback
         element.bind('submit', function(){
-          openMpi();
+          if (config.mpi !== false) {
+            openMpi();
+          }
 
           function done(){
-            postToMpi();
+            if (config.mpi !== false) {
+              postToMpi();
+            } else {
+              callApi();
+            }
             return;
           }
 
