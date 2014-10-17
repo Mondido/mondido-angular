@@ -1,6 +1,6 @@
 {
   "name": "mondido-angular",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Angular service",
   "main": "mondido.directive.js",
   "scripts": {
