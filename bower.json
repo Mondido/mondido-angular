@@ -21,7 +21,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": ">=1.11.1",
-    "jquery-postmessage": "*"
+    "jquery": ">=1.11.1"
   }
 }
