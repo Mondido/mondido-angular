@@ -70,7 +70,7 @@ angular.module('mondido.directives', ['mondido.encryption'])
         }
 
         function openMpiIframe(){
-          scope.waitingForMpi = true;
+          scope.mondido.waitingForMpi = true;
 
           scope.$apply(function(){
             var mpiOverlay = $(document.createElement('div')).appendTo('body').attr('id', 'mpi-overlay');
