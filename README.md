@@ -86,6 +86,9 @@ Gets called with with an error object as an argument. See <https://www.mondido.c
 
 Gets called with the full jqXHR object and tht http status as a string ([see jQuery doc](http://api.jquery.com/jquery.ajax/)) 
 
+#### mpi
+**boolean** *optional (defaults to true)* Whether or not to use MPI (3D Secure)
+
 ####encrypted_parameters
 **array** The parameters you wish to encrypt before posting them to the API endpoint.
 
@@ -131,6 +134,11 @@ The view
 #### Payment form directive
 The payment-config directive mondidifies your form, so that it can send encrypted data to us or your back-end. You need to provide the **configuration object** and the **payment model** for the directive to work. Name them what you want, and let the directive know by providing the `payment-config` and `ng-model` attributes.
 
-##### Optional loader, overlay or whatever
-In case you are using 3D Secure, the directive also provides the **mondido.waitingForMpi** boolean, which will resolve to true while the 3D Secure window is open.
 
+MPI (3D Secure)
+---
+The directive will provide the scope with a **mondido.isLoading** boolean, which resolves to true while an API call is being processed.
+
+The directive also provides the **mondido.waitingForMpi** boolean, which will resolve to true while the user is going through the MPI flow.
+
+The MPI authorization will be performed in a new window. If an older, incompatible, version of Internet Explorer is being used, MPI will fall back to an iFrame. If so, you will have the **#mpi-iframe** and **#mpi-overlay** (div) that you can style using CSS.
