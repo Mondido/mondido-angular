@@ -93,7 +93,7 @@ angular.module('mondido.directives', ['mondido.encryption'])
         function postToMpi(){
           var payload = createPayloadFromData(payment);
           var mpiPostForm = $(document.createElement('form'))
-            .attr('action', 'http://pay.localmondido.com:3000/v1/mpi_js')
+            .attr('action', 'https://pay.mondido.com/v1/mpi_js')
             .attr('method', 'POST')
             .attr('target', 'mpiwindow')
             .appendTo('body');
