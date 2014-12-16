@@ -137,11 +137,9 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
         // Call the Mondido API endpoint configured in the scope
         // then call adequate callbacks if configured in the config
         function callApi(){
-          scope.$apply(function(){
-            scope.mondido.isLoading = true;
-          });
+					scope.mondido.isLoading = true;
 
-          $.ajax({
+					var options = {
             type: 'POST',
             url: config.url || 'https://api.mondido.com/v1/transactions',
             data: createPayloadFromData(payment),
@@ -169,7 +167,11 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
                 scope.$digest();
               }
             }
-          });
+					};
+
+					console.log(options);
+
+          $.ajax(options);
         }
        
         if ($window.addEventListener) {
