@@ -4,7 +4,8 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
   .directive('paymentConfig', ['$window', 'encryptString', function ($window, encryptString) {
     return {
       restrict: 'A',
-      link: function (scope, element, attrs) {
+			require: '^form',
+      link: function (scope, element, attrs, form) {
         var mpiWindow;
         var payment = scope[attrs.ngModel];
         var config = scope[attrs.paymentConfig];
@@ -169,8 +170,6 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
             }
 					};
 
-					console.log(options);
-
           $.ajax(options);
         }
        
@@ -226,6 +225,10 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
         // Open MPI window and run the user configured prepare method before proceeding with the MPI process
         // We need to pop the window here because browsers will block it in the done callback
         element.bind('submit', function(){
+					if (!form.$valid) {
+						return false;
+					}
+
           if (config.mpi !== false) {
             openMpi();
           }

@@ -7,6 +7,7 @@ angular.module('mondido.directives.cardNumber', [])
       restrict: 'A',
 			require: '^form',
       link: function (scope, element, attrs, form) {
+				var callback = scope[attrs['cardNumber']] || function(validObject){ console.log('implicit', validObject); };
         var cardTypes = [
           {
             name: 'amex',
@@ -56,15 +57,6 @@ angular.module('mondido.directives.cardNumber', [])
          return card.validLength.indexOf(cardNumber.length) > -1;
         }
 
-        function addCardType(element, cardType){
-          // Only add class if not already present
-          if (element.className.indexOf(cardType) == -1) {
-            scope.$apply(function(){
-              element.className += ' ' + cardType;
-            });
-          }
-        }
-
         function formatCardNumber(element){
           var cardNumber = element.val().replace(/\s/g, '');
           var chunks = [];
@@ -107,7 +99,6 @@ angular.module('mondido.directives.cardNumber', [])
             var card = cardTypes[i];
             match = cardNumber.match(card.pattern);
             if (match !== null) { // card number value matches a card type
-              addCardType(element.get(0), card.name);
               if (isValidLength(cardNumber, card)) {
                 return {valid: true, cardType: card.name};
               } else {
@@ -128,12 +119,12 @@ angular.module('mondido.directives.cardNumber', [])
 					} else {
 						makeInputNotValid(element);
 					}
+					callback(validObject);
 				}
 
         element.on('keyup', function(e){
           var element = $(e.target);
 						if ([37,38,39,40,16,17,18,91].indexOf(e.which) === -1) {
-						console.log(e.which);
 						scope.$apply(function(){
 							formatCardNumber(element);
 						});
