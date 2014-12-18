@@ -124,7 +124,7 @@ angular.module('mondido.directives.cardNumber', [])
 
         element.on('keyup', function(e){
           var element = $(e.target);
-						if ([37,38,39,40,16,17,18,91].indexOf(e.which) === -1) {
+						if ([37,38,39,40,16,17,18,91].indexOf(e.which) === -1 && attrs.format === 'true') {
 						scope.$apply(function(){
 							formatCardNumber(element);
 						});
