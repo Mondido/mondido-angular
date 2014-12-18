@@ -134,6 +134,23 @@ The view
 #### Payment form directive
 The payment-config directive mondidifies your form, so that it can send encrypted data to us or your back-end. You need to provide the **configuration object** and the **payment model** for the directive to work. Name them what you want, and let the directive know by providing the `payment-config` and `ng-model` attributes.
 
+## Card number 
+Our angular plug-in comes with an optional directive for your card number input, which will validate the length of the card number, detect card type and optionally format the input with spaces at every 4th position.
+
+The directive sets the validity of the form and input field including the ng-valid and ng-invalid classes.
+
+Use it by adding the **credit-card** attribute to your input field, and optionally send in a callback as the value of the attribute. You can also add `format="true"` for card number formatting.
+### The view
+
+	<input type="text" ng-model="payment.card_number" card-number="ccKeyUp" format="true" />
+
+### The controller
+	$scope.ccKeyUp = function(cardValidation){
+		// Triggered at key up in the card 
+	}
+The cardValidation object has the properties *bool* **valid** and *string* **cardType**
+
+
 
 MPI (3D Secure)
 ---
