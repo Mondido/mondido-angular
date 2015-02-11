@@ -91,7 +91,7 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
 
         // Create a form and post it the MPI endpoint
         function postToMpi(){
-          var payload = createPayloadFromData(payment);
+          var payload = createPayloadFromData(scope.payment);
           var mpiPostForm = $(document.createElement('form'))
             .attr('action', 'https://pay.mondido.com/v1/mpi_js')
             .attr('method', 'POST')
@@ -102,7 +102,7 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
             $(document.createElement('input'))
               .attr('name', prop)
               .attr('type', 'hidden')
-              .val(payment[prop])
+              .val(payload[prop])
               .appendTo(mpiPostForm);
           }
           mpiPostForm.submit();
@@ -143,7 +143,7 @@ angular.module('mondido.directives.paymentConfig', ['mondido.encryption'])
 					var options = {
             type: 'POST',
             url: config.url || 'https://api.mondido.com/v1/transactions',
-            data: createPayloadFromData(payment),
+            data: createPayloadFromData(scope.payment),
             success: function(r){
               scope.$apply(function(){
                 scope.mondido.isLoading = false;
