@@ -320,6 +320,7 @@ angular.module('mondido.encryption', [])
         }
 
         function stringToEncrypted(str, publicKey) {
+          str = pidCryptUtil.encodeUTF8(str);          
           var params = certParser(publicKey);
           var key = pidCryptUtil.decodeBase64(params.b64);
           var rsa = new pidCrypt.RSA();
