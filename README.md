@@ -36,7 +36,7 @@ The controller
       <strong>url</strong>: 'http://api.mondido.com/v1/transactions',
       // Prepare order for payment processing (optional)
       <strong>prepare</strong>: function(done){
-        // Here "Order" is your own model, this is just for demonstration purposes
+        // Here "Order" would be your own model, this is just for demonstration purposes only
         Order.create($scope.payment, function(order){
           $scope.payment.payment_ref = order.payment_ref;
           $scope.payment.hash = order.hash;
